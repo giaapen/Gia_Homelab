@@ -64,15 +64,16 @@ Domaine : `labgia.lan`
 
 
 
-dns
 
+**DNS** : le client interroge le DNS pour localiser le contrôleur de domaine (requêtes SRV).
 <img width="1132" height="182" alt="Image" src="https://github.com/user-attachments/assets/e3b1a55f-ea18-43a4-8da4-96ebc15c4ac1" />
 
 
-ldap
+**LDAP** : consultation de l'annuaire Active Directory par le client.
+
 <img width="1275" height="377" alt="Image" src="https://github.com/user-attachments/assets/453db7a3-8e4f-438f-bcdd-ee7ee54616d5" />
 
-Kerberos
+**Kerberos** : authentification de l'utilisateur et obtention des tickets (AS-REQ / AS-REP, TGS-REQ / TGS-REP).
 
 <img width="1142" height="412" alt="Image" src="https://github.com/user-attachments/assets/f946bc94-8d83-4ad4-a89c-81a60ecf3005" />
 
@@ -80,6 +81,11 @@ Kerberos
 - Scan du contrôleur de domaine pour identifier les ports ouverts et les services.
 
 <img width="891" height="431" alt="Image" src="https://github.com/user-attachments/assets/170c6575-165f-4c2d-b3a7-bba1db3801c8" />
+Le scan révèle les ports typiques d'un contrôleur de domaine Active Directory :
+- **53** (DNS) : localisation du contrôleur de domaine par les postes
+- **88** (Kerberos) : authentification des utilisateurs
+- **389** (LDAP) : consultation de l'annuaire
+- **445** (SMB) : accès aux partages SYSVOL et NETLOGON (GPO, scripts)
 
 ## Ce que j'ai appris
 
