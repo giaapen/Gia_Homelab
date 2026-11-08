@@ -16,7 +16,7 @@ Homelab réalisé pour pratiquer l'administration systèmes et réseaux et les b
 | Machine | Système | Rôle | Adresse IP |
 |---|---|---|---|
 | SRV-GIA01 | Windows Server 2022 | Contrôleur de domaine (AD DS, DNS) | 192.168.174.142 |
-| PC-CLIENTLAB01 | Windows 11 Enterprise (évaluation) | Poste client joint au domaine | 192.168.174.150 |
+| PC-CLIENTLAB01 | Windows 11 Enterprise (évaluation) | Poste client joint au domaine | 192.168.174.200 |
 | Kali | Kali Linux | Scans et analyse réseau | 192.168.174.129 |
 | Debian | Debian | Machine Linux du lab | 192.168.174.130 |
 
@@ -31,7 +31,7 @@ Domaine : `labgia.lan`
 
 ### Tests de connectivité (ping)
 
-| Depuis \ Vers | SRV-GIA01 (192.168.174.142) | PC-CLIENTLAB01 (192.168.174.150) | Kali (192.168.174.129) | Debian (192.168.174.130) |
+| Depuis \ Vers | SRV-GIA01 (192.168.174.142) | PC-CLIENTLAB01 (192.168.174.200) | Kali (192.168.174.129) | Debian (192.168.174.130) |
 |---|:---:|:---:|:---:|:---:|
 | **SRV-GIA01** | n/a | ✅ | ✅ | ✅ |
 | **PC-CLIENTLAB01** | ✅ | n/a | ✅ | ✅ |
@@ -108,6 +108,39 @@ mappages de lecteurs
 | RH | R: | \\SRV-GIA01\RH |
 | Compta | T: | \\SRV-GIA01\Compta |
 | Direction | G: | \\SRV-GIA01\Direction |
+
+
+
+### 7. Service DHCP
+- Installation du rôle DHCP sur le contrôleur de domaine et autorisation du serveur dans Active Directory.
+
+DHCP 
+DORA
+<img width="795" height="410" alt="image" src="https://github.com/user-attachments/assets/8ee8af5e-aab6-4700-8522-64795b9d162d" />
+
+- Création d'une étendue `192.168.174.200` – `192.168.174.250` (masque `255.255.255.0`).
+- Options distribuées aux clients : serveur DNS `192.168.174.142` et domaine `labgia.lan`, sans passerelle (réseau isolé).
+
+
+- Test : le client Windows 11, passé en adressage automatique, reçoit une adresse de l'étendue 
+<img width="835" height="535" alt="image" src="https://github.com/user-attachments/assets/ee474be1-d6e2-4f9f-8b4a-dbc5a2616074" />
+
+
+
+
+
+### 8. Politique de mots de passe et verrouillage de compte
+- GPO appliquée à la racine du domaine : longueur minimale 8 caractères, complexité activée, historique de 5 mots de passe.
+- Verrouillage du compte après 5 tentatives échouées pendant 15 minutes.
+- Test : 5 mots de passe erronés sur un compte du domaine, compte verrouillé, puis déverrouillé depuis Active Directory.
+- Analyse des journaux de sécurité : événements 4625 (échec de connexion) et 4740 (verrouillage de compte).
+
+<img width="627" height="440" alt="image" src="https://github.com/user-attachments/assets/97f1a8b4-f9c6-4edc-964c-50c7fe9913e6" />
+<img width="660" height="546" alt="image" src="https://github.com/user-attachments/assets/63b53f62-fc8e-4d59-a260-257c960afa8e" />
+<img width="697" height="690" alt="image" src="https://github.com/user-attachments/assets/e4e2cf99-8b35-4e36-8977-bdc5915e2277" />
+
+
+
 
 ## Ce que j'ai appris
 
