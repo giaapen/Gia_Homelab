@@ -87,6 +87,28 @@ Le scan révèle les ports typiques d'un contrôleur de domaine Active Directory
 - **389** (LDAP) : consultation de l'annuaire
 - **445** (SMB) : accès aux partages SYSVOL et NETLOGON (GPO, scripts)
 
+
+
+### 6. Gestion des accès par groupes et GPO
+- Création de groupes de sécurité par service (Support, RH, Compta, Direction) et d'un dossier partagé par service.
+- Droits NTFS et de partage donnés uniquement au groupe concerné.
+- GPO de préférences : mappage automatique d'un lecteur réseau par service, limité par ciblage au groupe de sécurité.
+
+<img width="951" height="777" alt="image" src="https://github.com/user-attachments/assets/acd83327-5555-4602-9a5c-b49ca53cb084" />
+
+filtrage des dossiers partagés
+<img width="961" height="652" alt="image" src="https://github.com/user-attachments/assets/569f7585-bdd8-41a0-afc6-2829510933ce" />
+
+mappages de lecteurs 
+<img width="916" height="522" alt="image" src="https://github.com/user-attachments/assets/a3a37d96-fb65-4f77-b387-ebc7264c48f7" />
+
+| Groupe | Lecteur | Partage |
+|---|---|---|
+| Support | S: | \\SRV-GIA01\Support |
+| RH | R: | \\SRV-GIA01\RH |
+| Compta | T: | \\SRV-GIA01\Compta |
+| Direction | G: | \\SRV-GIA01\Direction |
+
 ## Ce que j'ai appris
 
 - Kerberos prouve l'identité de l'utilisateur sans envoyer le mot de passe, alors que LDAP permet de consulter l'annuaire.
