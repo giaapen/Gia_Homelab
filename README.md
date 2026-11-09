@@ -18,7 +18,7 @@ Homelab réalisé pour pratiquer l'administration systèmes et réseaux et les b
 | SRV-GIA01 | Windows Server 2022 | Contrôleur de domaine (AD DS, DNS) | 192.168.174.142 |
 | PC-CLIENTLAB01 | Windows 11 Enterprise (évaluation) | Poste client joint au domaine | 192.168.174.200 |
 | Kali | Kali Linux | Scans et analyse réseau | 192.168.174.129 |
-| Debian | Debian | Machine Linux du lab | 192.168.174.130 |
+| Debian | Debian | Machine Linux du lab | 192.168.174.137 |
 
 Réseau : VMnet2 (Host-only), 192.168.174.0/24, sans passerelle ni accès à Internet.
 Domaine : `labgia.lan`
@@ -116,6 +116,7 @@ mappages de lecteurs
 
 DHCP 
 DORA
+
 <img width="795" height="410" alt="image" src="https://github.com/user-attachments/assets/8ee8af5e-aab6-4700-8522-64795b9d162d" />
 
 - Création d'une étendue `192.168.174.200` – `192.168.174.250` (masque `255.255.255.0`).
@@ -139,8 +140,14 @@ DORA
 <img width="660" height="546" alt="image" src="https://github.com/user-attachments/assets/63b53f62-fc8e-4d59-a260-257c960afa8e" />
 <img width="697" height="690" alt="image" src="https://github.com/user-attachments/assets/e4e2cf99-8b35-4e36-8977-bdc5915e2277" />
 
+### 9. Intégration d'un poste Linux au domaine
+- Jonction de la Debian au domaine `labgia.lan` avec `realmd`, `adcli` et `sssd` (Kerberos pour l'authentification, LDAP pour l'annuaire).
+- Prérequis réglés : DNS sur le contrôleur de domaine (`192.168.174.142`), nom de machine `debian01.labgia.lan` et heure synchronisée avec le serveur.
+- Vérification : `realm list` indique `kerberos-member`, `sssctl domain-status` affiche `Online`, et `id utilisateur@labgia.lan` renvoie l'identité et les groupes Active Directory.
+- Test : ouverture de session avec un compte du domaine (`su - utilisateur@labgia.lan`), dossier personnel créé automatiquement.
 
-
+<img width="511" height="190" alt="image" src="https://github.com/user-attachments/assets/a1b81546-d92a-4e1b-916e-51960d57d29f" />
+<img width="566" height="452" alt="image" src="https://github.com/user-attachments/assets/b35d7dea-3480-4ca3-b065-435db7b1db51" />
 
 ## Ce que j'ai appris
 
