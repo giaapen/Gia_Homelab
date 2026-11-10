@@ -99,7 +99,7 @@ filtrage des dossiers partagé : pas de fichier .exe ou de fichier audio autoris
 
 <img width="961" height="652" alt="image" src="https://github.com/user-attachments/assets/569f7585-bdd8-41a0-afc6-2829510933ce" />
 
-**mappages de lecteurs**
+
 <img width="777" height="510" alt="image" src="https://github.com/user-attachments/assets/f38eaa4d-718a-4443-ab5e-8865dde20052" />
 
 
