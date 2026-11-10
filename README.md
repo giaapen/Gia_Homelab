@@ -71,40 +71,44 @@ LDAP : consultation de l'annuaire Active Directory par le client.
 Kerberos : authentification de l'utilisateur et obtention des tickets (AS-REQ / AS-REP, TGS-REQ / TGS-REP).
 
 <img width="1142" height="412" alt="Image" src="https://github.com/user-attachments/assets/f946bc94-8d83-4ad4-a89c-81a60ecf3005" />
+5. Scan du réseau depuis kali avec nmap
 
-5. Scan réseau depuis Kali avec Nmap
 Scan du contrôleur de domaine pour identifier les ports ouverts et les services.
 Ports caractéristiques d'un contrôleur de domaine : 53 (DNS), 88 (Kerberos), 389 (LDAP), 445 (SMB).
 
-<img width="891" height="431" alt="Image" src="https://github.com/user-attachments/assets/170c6575-165f-4c2d-b3a7-bba1db3801c8" />
-Le scan révèle les ports typiques d'un contrôleur de domaine Active Directory
 
-  **53** (DNS) : localisation du contrôleur de domaine par les postes
-  **88** (Kerberos) : authentification des utilisateurs
-  **389** (LDAP) : consultation de l'annuaire
-  **445** (SMB) : accès aux partages SYSVOL et NETLOGON (GPO, scripts)
+
+Le scan révèle les ports typiques d'un contrôleur de domaine Active Directory  
+**53** (DNS) : localisation du contrôleur de domaine par les postes
+//**88** (Kerberos) : authentification des utilisateurs
+//**389** (LDAP) : consultation de l'annuaire
+//**445** (SMB) : accès aux partages SYSVOL et NETLOGON (GPO, scripts)
+
+<img width="891" height="431" alt="Image" src="https://github.com/user-attachments/assets/170c6575-165f-4c2d-b3a7-bba1db3801c8" />
+
 
 
 
 6. Gestion des accès et GPO
 Groupes de sécurité par service (Support, RH, Compta, Direction) et un dossier partagé par service, avec droits de partage et NTFS donnés uniquement au groupe concerné.
 GPO de préférences : mappage automatique d'un lecteur réseau par service, limité par ciblage au groupe de sécurité.
-Résultat : un utilisateur voit le lecteur de son service et reçoit « Accès refusé » sur les autres dossiers.
+filtrage des dossiers partagé : pas de fichier .exe ou de fichier audio autorisés
 
 <img width="951" height="777" alt="image" src="https://github.com/user-attachments/assets/acd83327-5555-4602-9a5c-b49ca53cb084" />
 
-filtrage des dossiers partagés
+
 <img width="961" height="652" alt="image" src="https://github.com/user-attachments/assets/569f7585-bdd8-41a0-afc6-2829510933ce" />
 
-mappages de lecteurs 
-<img width="916" height="522" alt="image" src="https://github.com/user-attachments/assets/a3a37d96-fb65-4f77-b387-ebc7264c48f7" />
+**mappages de lecteurs**
+<img width="777" height="510" alt="image" src="https://github.com/user-attachments/assets/f38eaa4d-718a-4443-ab5e-8865dde20052" />
+
 
 | Groupe | Lecteur | Partage |
 |---|---|---|
 | Support | S: | \\SRV-GIA01\Support |
 | RH | R: | \\SRV-GIA01\RH |
-| Compta | T: | \\SRV-GIA01\Compta |
-| Direction | G: | \\SRV-GIA01\Direction |
+| Compta | Z: | \\SRV-GIA01\Compta |
+| Direction | W: | \\SRV-GIA01\Direction |
 
 
 7. Service DHCP
@@ -124,13 +128,11 @@ DORA
 
 
 - Test : le client Windows 11, passé en adressage automatique, reçoit une adresse de l'étendue 
-<img width="835" height="535" alt="image" src="https://github.com/user-attachments/assets/ee474be1-d6e2-4f9f-8b4a-dbc5a2616074" />
-
 
 8. Réservation DHCP
 Adresse réservée pour le poste client, associée à son adresse MAC.
 Test : après ipconfig /release puis /renew, le client reçoit toujours l'adresse réservée.
-
+<img width="835" height="535" alt="image" src="https://github.com/user-attachments/assets/ee474be1-d6e2-4f9f-8b4a-dbc5a2616074" />
 
 9. Politique de mots de passe et verrouillage de compte
 GPO appliquée à la racine du domaine (Default Domain Policy) : longueur minimale, complexité, verrouillage du compte après 5 échecs.
@@ -140,7 +142,7 @@ Test : compte verrouillé après 5 mauvais mots de passe, événements 4625 (éc
 <img width="660" height="546" alt="image" src="https://github.com/user-attachments/assets/63b53f62-fc8e-4d59-a260-257c960afa8e" />
 <img width="697" height="690" alt="image" src="https://github.com/user-attachments/assets/e4e2cf99-8b35-4e36-8977-bdc5915e2277" />
 
-### 9. Intégration d'un poste Linux au domaine
+### 10. Intégration d'un poste Linux au domaine
 - Jonction de la Debian au domaine `labgia.lan` avec `realmd`, `adcli` et `sssd` (Kerberos pour l'authentification, LDAP pour l'annuaire).
 - Prérequis réglés : DNS sur le contrôleur de domaine (`192.168.174.142`), nom de machine `debian01.labgia.lan` et heure synchronisée avec le serveur.
 - Vérification : `realm list` indique `kerberos-member`, `sssctl domain-status` affiche `Online`, et `id utilisateur@labgia.lan` renvoie l'identité et les groupes Active Directory.
@@ -149,27 +151,32 @@ Test : compte verrouillé après 5 mauvais mots de passe, événements 4625 (éc
 <img width="511" height="190" alt="image" src="https://github.com/user-attachments/assets/a1b81546-d92a-4e1b-916e-51960d57d29f" />
 <img width="566" height="452" alt="image" src="https://github.com/user-attachments/assets/b35d7dea-3480-4ca3-b065-435db7b1db51" />
 
+## Ce que j'ai appris
 
+- **DNS et Active Directory** : un poste trouve le contrôleur de domaine grâce au DNS. Une faute dans l'adresse DNS du client (`192.18.174.142` au lieu de `192.168.174.142`) l'empêchait de rejoindre le domaine, diagnostiquée avec `ipconfig /all` et `nslookup`.
+- **Kerberos et LDAP** : Kerberos prouve l'identité sans envoyer le mot de passe, alors que LDAP permet de consulter l'annuaire.
+- **Droits d'accès** : les droits d'un dossier partagé s'appliquent à deux niveaux (partage et NTFS), et le plus restrictif l'emporte.
+- **GPO** : le ciblage au niveau de l'élément limite un lecteur à un groupe ; sans ciblage, il s'affiche pour tous.
+- **Linux dans le domaine** : la jonction crée l'objet ordinateur, et c'est `sssd` qui rend les comptes du domaine utilisables.
+- **Réseau virtuel** : le sous-réseau d'un réseau VMware doit éviter celui du réseau NAT de l'hôte.
 
-10. Poste Linux dans le domaine (Debian)
-Jonction au domaine avec realmd, adcli et sssd (Kerberos pour l'authentification, LDAP pour l'annuaire).
-Vérification : realm list (kerberos-member), sssctl domain-status (Online), id utilisateur@labgia.lan (groupes Active Directory).
-Dépannage : sssd ne démarrait pas sans le fichier /etc/sssd/sssd.conf, et la connexion se bloquait jusqu'à dyndns_update = false et ad_gpo_access_control = permissive.
+## Difficultés rencontrées
 
+| Problème | Cause | Résolution |
+|---|---|---|
+| Le client ne trouvait pas le domaine | Adresse DNS mal saisie sur le client | Correction dans les propriétés IPv4, vérifiée avec `nslookup` |
+| Le lecteur réseau n'apparaissait pas | Ciblage de la GPO vide ou sur le mauvais groupe | Ciblage recréé avec le bon groupe de sécurité |
+| Le dossier partagé était inaccessible | Droits NTFS supprimés par erreur en désactivant l'héritage | Restauration avec `takeown` et `icacls` |
+| `id` ne reconnaissait pas les comptes du domaine sous Debian | `sssd` ne démarrait pas sans `/etc/sssd/sssd.conf` | Création du fichier (droits `600`) puis démarrage du service |
 
-Ce que j'ai appris
-Active Directory dépend du DNS : une faute dans l'adresse DNS du client (192.18.174.142 au lieu de 192.168.174.142) l'empêchait de trouver le domaine ; diagnostic avec ipconfig /all et nslookup.
-Kerberos prouve l'identité sans envoyer le mot de passe, alors que LDAP permet de consulter l'annuaire.
-Les droits d'un dossier partagé s'appliquent à deux niveaux (partage et NTFS) : le plus restrictif l'emporte.
-Le ciblage au niveau de l'élément limite un lecteur de GPO à un groupe ; sans ciblage, il s'affiche pour tous.
-Sous Linux, c'est sssd qui rend les comptes du domaine utilisables ; la jonction seule crée uniquement l'objet ordinateur.
-Le sous-réseau d'un réseau virtuel VMware doit être choisi pour ne pas entrer en conflit avec le réseau NAT de l'hôte.
-Prochaines étapes
- Service DHCP et réservation
- GPO (lecteurs réseau, mots de passe)
- Poste Linux joint au domaine
- SSH par clé sur la Debian
- Pare-feu (pfSense)
-Note
+## Prochaines étapes
+
+- [x] Service DHCP et réservation
+- [x] GPO (lecteurs réseau, mots de passe)
+- [x] Poste Linux joint au domaine
+- [ ] SSH par clé sur la Debian
+- [ ] Pare-feu (pfSense)
+
+## Note
 
 Lab réalisé à des fins d'apprentissage, sur un réseau isolé. Les captures ne contiennent ni mot de passe ni donnée personnelle.
